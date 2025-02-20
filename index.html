@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate My Outfit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .title {
+            background-color: #ff7070;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 5px 5px 0px #000;
+            transform: rotate(-1deg);
+        }
+
+        .upload-container {
+            width: 200px;
+            height: 200px;
+            background-color: #ff7070;
+            border: 3px solid #000;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 5px 5px 0px #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .input-name {
+            width: 100%;
+            max-width: 300px;
+            padding: 0.8rem;
+            border: 3px solid #000;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-shadow: 5px 5px 0px #000;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .button {
+            padding: 0.8rem 2rem;
+            border: 3px solid #000;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 5px 5px 0px #000;
+            transition: all 0.2s;
+        }
+
+        .button:active {
+            box-shadow: 2px 2px 0px #000;
+            transform: translate(3px, 3px);
+        }
+
+        .button-start {
+            background-color: #fff;
+        }
+
+        .button-reset {
+            background-color: #ff7070;
+            color: white;
+        }
+
+        .roast-text {
+            background-color: white;
+            padding: 1rem;
+            border: 3px solid #000;
+            border-radius: 10px;
+            box-shadow: 5px 5px 0px #000;
+            width: 100%;
+            max-width: 500px;
+            min-height: 100px;
+            text-align: center;
+            display: none;
+        }
+
+        .coffee-button {
+            background-color: white;
+            padding: 0.8rem 2rem;
+            border: 3px solid #000;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 5px 5px 0px #000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border: 3px solid #000;
+            border-radius: 15px;
+            box-shadow: 8px 8px 0px #000;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .qris-container {
+            margin: 20px 0;
+            padding: 10px;
+            border: 2px dashed #ff7070;
+            border-radius: 10px;
+        }
+
+        .qris-image {
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .payment-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .button-container {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">RATE MY OUTFIT</h1>
+        
+        <div class="upload-container" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" hidden accept="image/*">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7m4-5l5-5l5 5m-5-5v17"/>
+            </svg>
+            <span>Upload Photo</span>
+            <img id="previewImage" class="preview-image" alt="Preview">
+        </div>
+
+        <input type="text" class="input-name" placeholder="Tulis Namamu.." id="nameInput">
+        
+        <div class="button-container">
+            <button class="button button-start" onclick="startRoast()">Mulai</button>
+            <button class="button button-reset" onclick="resetForm()">Ulangi</button>
+        </div>
+
+        <p class="roast-text" id="roastText"></p>
+
+        <button class="coffee-button" onclick="openPaymentModal()">
+            <span>Traktir Kopi</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zm4-7v3m4-3v3m4-3v3"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closePaymentModal()">&times;</button>
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Traktir Kopi ☕</h2>
+            <p>Scan QRIS di bawah ini untuk mentraktir saya kopi</p>
+            
+            <div class="qris-container">
+                <div class="qris-image">
+                    <img src="/css/asset/qris.jpeg" alt="QRIS Code" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <p style="font-weight: bold; margin-top: 10px;">Terimakasih Orang Baik</p>
+            </div>
+
+            <div class="payment-info">
+                <p>Merchant: Rate My Outfit</p>
+                <p>ID: RMO12345</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        Copyright © 2025. All Rights Reserved
+    </footer>
+    <script src="/js/script.js"></script>
+</body>
+</html>
